@@ -44,7 +44,7 @@ stages:
         echo "##vso[task.setvariable variable=password]$pass"
        displayName: 'Take password from JSON'
        
-     - script: docker build -t bobadock https://github.com/bogdanbanda/aspnet-core-docker-demo/tree/master/Application/aspnet-core-dotnet-core
+     - script: docker build -t bobadock github.com/bogdanbanda/aspnet-core-docker-demo/tree/master/Application/aspnet-core-dotnet-core
        displayName: 'docker build the image '
 
      - script:  |
