@@ -28,7 +28,7 @@ stages:
       continueOnError: True
     - script: terraform plan
       displayName: 'plan'
-    - script: terraform apply -auto-approve 
+    - script: terraform apply -refresh-only -auto-approve 
       displayName: 'Terraform apply'
   
     
