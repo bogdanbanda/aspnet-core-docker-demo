@@ -2,15 +2,54 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+- stage: DeployInfrastructure
+  jobs:
+  - job: DeployWithTerraform
+    steps:
+    - script: terraform init
+      displayName: 'Terraform init'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    - script: terraform apply  -auto-approve 
+      displayName: 'Terraform apply'
+  
+    
+#- stage: DeployApp
+#  jobs:
+#  - job: DeployDockerImage
+#    steps:
+#     - script: az login --service-principal -u $(username) -p $(password) --tenant a047dbfb-d5eb-47f3-8d21-381786ab6c80
+#       displayName: 'Login to Azure'
+#     - script:  |
+#        pass=$(az acr credential show -n BoBacr --resource-group BoBaRG --query passwords[0].value | tr -d '"' | tr -d ' ')
+#        echo $pass
+#        echo "##vso[task.setvariable variable=password]$pass"
+#       displayName: 'Take password from JSON'
+#       
+#     - script: docker build -t bobadock .
+#       displayName: 'docker build the image '
+#
+#     - script:  |
+#        docker login -u BoBacr -p $(password) BoBacr.azurecr.io
+#       displayName: 'docker login'
+#
+#     - script: docker tag bobadock:latest  BoBacr.azurecr.io/bobadock:latest
+#       displayName: 'docker tag to remote CR'
+#
+#     - script: docker push BoBacr.azurecr.io/bobadock:latest
+#       displayName: 'docker push to remote CR'
+#       
+#     - script: docker run -d -p 443:8080 BoBacr.azurecr.io/bobadock:latest
+#       displayName: 'Run Docker Image'
+#      
+#     - script: az webapp restart --name BoBaWEB --resource-group BoBaRG
+#       displayName: 'restart web app'
